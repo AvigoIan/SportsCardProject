@@ -3,12 +3,14 @@ import { FormControl, Input, InputLabel } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { PageResults } from "./Results";
 
 interface Props {}
 
 const Content = styled.div`
   display: flex;
   color: black;
+  flex-direction: column;
 `;
 
 const ContentButton = styled.div`
@@ -18,20 +20,32 @@ type Inputs = {
   nameInput: string;
 };
 
+interface EBayItem {
+  title: string;
+  price: {
+    value: string;
+    currency: string;
+  };
+  itemId: string;
+  itemLocation: {
+    postalCode: string;
+    country: string;
+  };
+  image: {
+    imageUrl: string;
+  };
+}
 export const PageContent: React.FC<Props> = () => {
   const { handleSubmit, register } = useForm<Inputs>();
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<EBayItem[]>([]);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log("data is ", data);
-    // handleSearch(data[""])
-    handleSearch(data["nameInput"]);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await handleSearch(data["nameInput"]);
   };
 
   const handleSearch = async (query: any) => {
     try {
-      console.log("QUERY ", query);
       const response = await axios.get("http://localhost:8080/search", {
         params: { q: query, limit: 30 },
       });
@@ -59,6 +73,8 @@ export const PageContent: React.FC<Props> = () => {
           </ContentButton>
         </FormControl>
       </form>
+
+      <PageResults items={items} />
     </Content>
   );
 };
