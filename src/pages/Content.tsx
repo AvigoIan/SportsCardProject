@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { PageResults } from "./Results";
+import { EBayItem } from "../types/types";
 
 interface Props {}
 
@@ -11,6 +12,7 @@ const Content = styled.div`
   display: flex;
   color: black;
   flex-direction: column;
+  padding: var(--application-padding-lg);
 `;
 
 const ContentButton = styled.div`
@@ -20,21 +22,6 @@ type Inputs = {
   nameInput: string;
 };
 
-interface EBayItem {
-  title: string;
-  price: {
-    value: string;
-    currency: string;
-  };
-  itemId: string;
-  itemLocation: {
-    postalCode: string;
-    country: string;
-  };
-  image: {
-    imageUrl: string;
-  };
-}
 export const PageContent: React.FC<Props> = () => {
   const { handleSubmit, register } = useForm<Inputs>();
 
